@@ -1,0 +1,29 @@
+{% extends "base.html"  %}
+{% block content%}
+<div class="px-4 py-5 my-5 text-center">
+    <img class="d-block mx-auto mb-4" src="{{ url_for('static', filename='images/spending.png') }}" alt="" width="82" height="70">
+    <h1 class="display-5 fw-bold text-body-emphasis">Ditch the Clutter, Embrace Financial Clarity.</h1>
+    <div class="col-lg-6 mx-auto">
+        <p class="lead mb-4">stop wondering where your money went. See exactly where it goes with real-time tracking and automated insights.
+        </p>
+        {% if current_user.is_authenticated %}
+        <div class="d-grid gap-2 d-sm-flex justify-content-sm-center">
+            <a href="{{ url_for('main.manage') }}">
+                <button type="button" class="btn btn-primary btn-lg px-3 gap-3 fs-4">Add</button>
+            </a>
+        </div>
+        {% else %}
+        <div class="d-grid gap-2 d-sm-flex justify-content-sm-center">
+            <a href="{{ url_for('main.manage') }}">
+                <button type="button" class="btn btn-primary btn-lg px-5 gap-3 fs-3">Sign in</button>
+            </a>
+            <h3>or</h3>
+            <a href="{{ url_for('main.register') }}">
+                <button type="button" class="btn btn-secondary btn-lg px-5 gap-3 fs-3">Register</button>
+            </a>
+
+        </div>
+        {% endif %}
+    </div>
+</div>
+{%endblock%}

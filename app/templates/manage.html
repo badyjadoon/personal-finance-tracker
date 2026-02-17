@@ -1,0 +1,20 @@
+{% extends "base.html"  %}
+{%block title%} Manage your finance {%endblock%}
+{% block content%}
+<div class="px-4 py-5 my-4 text-center">
+    <img class="d-block mx-auto mb-7" src="{{ url_for('static', filename='images/manage.png') }}" alt="" width="150" height="150">
+    <h1 class="display-5 fw-bold text-body-emphasis">Ditch the Clutter, Embrace Financial Clarity.</h1>
+    <div class="col-lg-6 mx-auto">
+        <p class="lead mb-4">Click below to add your Income or Expense
+        </p>
+        <div class="d-grid gap-2 d-sm-flex justify-content-sm-center">
+            <a href="{{ url_for('main.add_expense') }}">
+                <button type="button" class="btn btn-outline-danger btn-lg px-4 gap-3">Expense</button>
+            </a>
+            <a href="{{ url_for('main.incomes') }}">
+                <button type="button" class="btn btn-outline-success btn-lg px-4 gap-3">Income</button>
+            </a>
+        </div>
+    </div>
+</div>
+{%endblock%}

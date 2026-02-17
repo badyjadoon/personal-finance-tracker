@@ -1,0 +1,66 @@
+
+{% extends  'base.html' %}
+{%block title%}Incomes{%endblock%}
+{% block content %}
+<div class="container mt-4">
+
+  <div class="d-flex justify-content-between align-items-center mb-3">
+    <h2>Incomes</h2>
+    <a href="{{ url_for('main.add_income') }}" class="btn btn-primary">
+      + Add Income
+    </a>
+  </div>
+
+  {% if incomes %}
+  <div class="table-responsive">
+    <table class="table table-bordered table-hover align-middle">
+      <thead class="table-dark">
+        <tr>
+          <th>Date</th>
+          <th>Source</th>
+          <th>Description</th>
+          <th class="text-left">Amount</th>
+          <th class="text-center">Actions</th>
+        </tr>
+
+      </thead>
+
+      <tbody>
+        {% for income in incomes %}
+        <tr>
+          <td>{{ income.date.strftime('%d-%m-%Y') }}</td>
+          <td>{{ income.source.title() }}</td>
+          <td>{{ income.description or '-' }}</td>
+          <td class="text-left">PKR {{ "%.2f"|format(income.amount) }}</td>
+          <td class="text-center">
+
+            <a href="{{ url_for('main.edit_income', income_id=income.id) }}"
+               class="btn btn-sm btn-outline-secondary">
+              Edit
+            </a>
+
+            <form method="POST"
+                  action="{{ url_for('main.delete_income', income_id=income.id) }}"
+                  class="d-inline">
+              <button type="submit"
+                      class="btn btn-sm btn-outline-danger"
+                      onclick="return confirm('Delete this income?')">
+                Delete
+              </button>
+            </form>
+
+          </td>
+
+        </tr>
+        {% endfor %}
+      </tbody>
+    </table>
+  </div>
+  {% else %}
+    <div class="alert alert-info">
+      No incomes recorded yet.
+    </div>
+  {% endif %}
+
+</div>
+{% endblock %}

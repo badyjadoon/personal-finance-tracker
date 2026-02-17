@@ -1,0 +1,172 @@
+{% extends "base.html" %}
+{% block title %}Dashboard{% endblock %}
+
+{% block content %}
+<div class="container mt-4">
+
+  <!-- Welcome -->
+  <h3>Welcome back, {{ current_user.name }} 👋</h3>
+  <p class="text-muted">Your financial overview for this month</p>
+
+  <div class="container mt-4">
+
+  <div class="row g-3">
+
+    <!-- Total Income -->
+    <div class="col-12 col-md-6 col-lg-3">
+      <div class="card border-success h-100">
+        <div class="card-body">
+          <h6 class="card-title text-muted">Total Income</h6>
+          <h4 class="text-success">PKR {{ total_income }}</h4>
+        </div>
+      </div>
+    </div>
+
+    <!-- Total Expense -->
+    <div class="col-12 col-md-6 col-lg-3">
+      <div class="card border-danger h-100">
+        <div class="card-body">
+          <h6 class="card-title text-muted">Total Expense</h6>
+          <h4 class="text-danger">PKR {{ total_expense }}</h4>
+        </div>
+      </div>
+    </div>
+
+    <!-- Savings -->
+    <div class="col-12 col-md-6 col-lg-3">
+      <div class="card border-primary h-100">
+        <div class="card-body">
+          <h6 class="card-title text-muted">Savings</h6>
+          <h4 class="text-primary">
+            PKR {{ total_income - total_expense }}
+          </h4>
+        </div>
+      </div>
+    </div>
+
+    <!-- Transactions -->
+    <div class="col-12 col-md-6 col-lg-3">
+      <div class="card border-secondary h-100">
+        <div class="card-body">
+          <h6 class="card-title text-muted">Transactions</h6>
+          <h4>{{ transaction_count }}</h4>
+        </div>
+      </div>
+    </div>
+
+  </div>
+
+</div>
+<hr class="my-4">
+<div class="text-center mb-4">
+  <h5 class="mb-3">Quick Actions</h5>
+
+  <div class="d-flex justify-content-center gap-3 flex-wrap">
+
+    <a href="{{ url_for('main.add_income') }}"
+       class="btn btn-success">
+      + Add Income
+    </a>
+
+    <a href="{{ url_for('main.add_expense') }}"
+       class="btn btn-danger">
+      + Add Expense
+    </a>
+
+    <a href="{{ url_for('main.manage') }}"
+       class="btn btn-outline-primary">
+      Manage Records
+    </a>
+      <a href="{{ url_for('main.export_csv', year=2026, month=2) }}"
+   class="btn btn-outline-success">
+  Export CSV
+</a>
+  </div>
+</div>
+    <hr class="my-4">
+  <div class="row mb-4">
+
+  <div class="col-md-4">
+    <div class="card shadow-sm h-100">
+      <div class="card-body text-center">
+        <h6 class="text-muted">This Month Income</h6>
+        <h4 class="text-success">PKR {{ monthly_income }}</h4>
+      </div>
+    </div>
+  </div>
+
+  <div class="col-md-4">
+    <div class="card shadow-sm h-100">
+      <div class="card-body text-center">
+        <h6 class="text-muted">This Month Expense</h6>
+        <h4 class="text-danger">PKR {{ monthly_expense }}</h4>
+      </div>
+    </div>
+  </div>
+
+  <div class="col-md-4">
+    <div class="card shadow-sm h-100">
+      <div class="card-body text-center">
+        <h6 class="text-muted">Net Savings</h6>
+        <h4 class="text-primary">
+          PKR {{ monthly_income - monthly_expense }}
+        </h4>
+      </div>
+    </div>
+  </div>
+
+</div>
+    <hr class="my-4">
+
+<h5 class="mb-3 text-center">This Month Overview</h5>
+
+<div class="row justify-content-center">
+  <div class="col-md-6">
+    <canvas id="monthlyDonutChart"></canvas>
+  </div>
+</div>
+
+
+  <!-- Recent Transactions -->
+
+</div>
+<script>
+const ctx = document.getElementById('monthlyDonutChart');
+
+new Chart(ctx, {
+    type: 'doughnut',
+    data: {
+        labels: ['Income', 'Expense'],
+        datasets: [{
+            data: [
+                {{ monthly_income }},
+                {{ monthly_expense }}
+            ],
+            backgroundColor: [
+                '#198754',  // Bootstrap green
+                '#dc3545'   // Bootstrap red
+            ],
+            borderWidth: 1
+        }]
+    },
+    options: {
+        responsive: true,
+        cutout: '65%',
+        plugins: {
+            legend: {
+                position: 'bottom'
+            },
+            tooltip: {
+                callbacks: {
+                    label: function(context) {
+                        return context.label + ': PKR ' + context.parsed;
+                    }
+                }
+            }
+        }
+    }
+});
+</script>
+
+{% endblock %}
+
